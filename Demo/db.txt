@@ -1,0 +1,50 @@
+
+//Query to create Employee Table
+
+CREATE TABLE [Employee].[Employee] (
+	[EmployeeID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar] (50) NOT NULL,
+	[MiddleName] [varchar] (50) NULL,
+	[LastName] [varchar] (50) NOT NULL,
+	[Gender] [varchar] (6) NOT NULL,
+	[DateOfBirth] [date] NOT NULL,
+	[JobTitle] [varchar] (50) NOT NULL,
+	[Department] [varchar] (50) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[Username] [varchar](50) NOT NULL,
+	[Password] [varchar](128) NOT NULL  DEFAULT HASHBYTES('SHA1','1@Mindfire'),
+	[ActiveStatus] [bit] NOT NULL DEFAULT (1),
+	[UserType] [varchar] (50) NOT NULL,
+	[Photo] [varchar] (128) NULL,
+	[ModifiedDate] [datetime] NOT NULL  DEFAULT (getdate()),
+	CONSTRAINT PK_Employee PRIMARY KEY ([EmployeeID]),
+	CONSTRAINT UC_Employee UNIQUE (EmployeeID,Email,UserName)
+);
+
+
+//Query to create LoginDetails Table
+
+CREATE TABLE [Employee].[LoginDetails] (
+	
+	[LoginID] [int] IDENTITY(1,1) NOT NULL,
+	[EmployeeID] [int] NOT NULL,
+	[SessionID] [varchar] (128) NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL  DEFAULT (getdate()),
+	CONSTRAINT PK_Login PRIMARY KEY ([LoginID]),
+	CONSTRAINT [FK_LoginDetails_Employee_EmployeeID] FOREIGN KEY ([EmployeeID])
+	REFERENCES [Employee].[Employee] ([EmployeeID])
+);
+
+//Query to create Project Table
+
+CREATE TABLE [Employee].[Project] (
+	
+	[ProjectID] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [varchar] (80) NOT NULL,
+	[Descreption] [varchar] (256) NOT NULL,
+	[TeamLeader] [int] NOT NULL,
+	[ActiveStatus] [bit] NOT NULL DEFAULT (1)
+	CONSTRAINT PK_Project PRIMARY KEY ([ProjectID]),
+	CONSTRAINT [FK_Project_TeamLeader_EmployeeID] FOREIGN KEY ([TeamLeader])
+	REFERENCES [Employee].[Employee] ([EmployeeID])
+);
